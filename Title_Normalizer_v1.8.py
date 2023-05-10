@@ -1,3 +1,4 @@
+# 10.05.23 | changed the cursor color to white in the black theme
 # 04.05.23 | removed some button icons because they were displayed inproperly in some screen resolutions
            # added 2 themes, removing grey theme
 
@@ -102,8 +103,6 @@ def title_normalizer(event=None):
     rslt.delete('1.0', 'end')
     rslt.insert("end", T)
 
-#txt.bind("<<Paste>>", title_normalizer)
-
 def copy_to_clipboard():
     global F
     final_rslt = rslt.get('1.0', 'end-1c')
@@ -115,6 +114,7 @@ def clear_entry():
     txt.delete('1.0', 'end')
     rslt.delete('1.0', 'end')
     rslt.config(state="normal")
+    rslt.delete('1.0', 'end')
 
 def rename():
     final_rslt = rslt.get('1.0', 'end-1c')
@@ -124,8 +124,6 @@ def rename():
         rslt.delete('1.0', 'end')
         rslt.insert("end", W)
         rslt.config(state="disabled")
-    else:
-        pass
 
     old_file = f"{file_directory}" + f"{filename}.{file_ext}"
     new_file_1 = f"{file_directory}" + f"{F}.{file_ext}"
@@ -165,6 +163,10 @@ def black_bg(event=None):
     rslt.config(bg="#121212", fg="white")
     txt1.config(bg="#121212", fg="white")
     rslt1.config(bg="#121212", fg="white")
+    txt.configure(insertbackground="white")
+    txt1.configure(insertbackground="white")
+    rslt.configure(insertbackground="white")
+    rslt1.configure(insertbackground="white")
 
 f2 = Button()
 root.bind('<F2>', hunter_green_bg)
@@ -413,6 +415,6 @@ thememenu.add_command(label="Black", command=black_bg)
 # Adding the File menu to the menubar
 menubar.add_cascade(label="File", menu=filemenu)
 menubar.add_cascade(label="Mode", menu=modemenu)
-menubar.add_cascade(label="Theme", menu=thememenu)    # sharshara usulini qo'shish, bu muhim!
+menubar.add_cascade(label="Theme", menu=thememenu)
 
 root.mainloop()
