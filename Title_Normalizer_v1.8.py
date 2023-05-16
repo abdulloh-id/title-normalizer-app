@@ -1,20 +1,21 @@
-# 10.05.23 | changed the cursor color to white in the black theme
-# 04.05.23 | removed some button icons because they were displayed inproperly in some screen resolutions
-           # added 2 themes, removing grey theme
+# 16.05.23 | Made the app screen bigger for easier usage
+#          | Removed manual attribution of button color themes, that was too much hassle
+#          | Added 2 styles for buttons and clam theme to the app
+#          | Removed some redundant code
+# 10.05.23 | Changed the cursor color to white in the black theme
+# 04.05.23 | Removed some button icons because they were displayed inproperly in some screen resolutions
+#          | Added 2 color themes, removed boring grey theme
 
-# 01.04.23 | made the app window responsive to various screens
-# 28.03.23 | 1) dealt with some syntax errors in renaming; but there are still harmless bugs
-#            2) added renaming ability right from textbox     
-# some major buxs fixed, the code has become more coherent
-# you can switch between windows using frames, this method is smooth.
-# class based windows are myth
+# 01.04.23 | Made the app window responsive to various screens
+# 28.03.23 | 1) Dealt with some syntax errors in renaming; but there are still harmless bugs
+#            2) Added renaming ability right from textbox
 
-import tkinter
 import re
+import os
 from tkinter import *
 from tkinter import filedialog as fd
-import os
 from tkinter import Menu
+from tkinter import ttk
 from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(1)
@@ -23,15 +24,29 @@ root = Tk()
 root.title("Title Normalizer")
 root.resizable(0,0)
 
-# get the screen dimension
+# getting the screen dimension
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 # making the app window close to the centre of the screen
-iheight = int(screen_width*0.4)
+iheight = int(screen_width*0.35)
 iwidth = int(screen_height*0.3)
 
 root.geometry(f"+{iheight}+{iwidth}")
+
+style = ttk.Style()             # adding a theme
+style.theme_use('clam')
+
+style_grey = ttk.Style()        # adding normal button style
+style_grey.configure('Grey.TButton')
+
+style_black = ttk.Style()       # adding black button style
+style_black.configure('Black.TButton',
+                        background='black',
+                        foreground='orange',
+                        activebackground='black',
+                        activeforeground='black',
+                        highlightcolor='black')
 
 def info_popup(event=None):
     top = Toplevel(root)
@@ -62,11 +77,11 @@ root.bind('<F1>', info_popup)
 main_fr = Frame(root, bg='#025a6c')
 main_fr.grid(ipady=2)
 
-txt = Text(main_fr, font='Calibri 10', height=5, width=25, wrap=WORD)
+txt = Text(main_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
 txt.focus()
 txt.grid(row=0, column=0, pady=5, padx=5)
 
-rslt = Text(main_fr, font=('Calibri 10'), height=5, width=25, wrap=WORD)
+rslt = Text(main_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
 rslt.grid(row=1, column=0)
 
 def get_file_name(event=None):
@@ -87,7 +102,7 @@ def get_file_name(event=None):
     txt.insert("end", filename)
     rslt.delete('1.0', 'end')
 
-root.bind("<Control-o>", get_file_name)
+root.bind("<Control-o>", get_file_name)     # adding a shortcut for opening a file
 
 def title_normalizer(event=None):
     global T
@@ -130,125 +145,43 @@ def rename():
     os.rename(old_file, new_file_1)
     clear_entry()
 
-# color themes
+# adding buttons
 
-def ocean_bg(event=None):
-    main_fr.configure(bg='#025a6c')
-    txt.config(bg="white", fg="black")
-    rslt.config(bg="white", fg="black")
-    side_fr.configure(bg='#025a6c')
-    txt1.config(bg="white", fg="black")
-    rslt1.config(bg="white", fg="black")
-
-def hunter_green_bg(event=None):
-    main_fr.configure(bg='#355E3B')
-    side_fr.configure(bg='#355E3B')
-    txt.config(bg="white", fg="black")
-    rslt.config(bg="white", fg="black")
-    txt1.config(bg="white", fg="black")
-    rslt1.config(bg="white", fg="black")
-
-def navy_bg(event=None):
-    main_fr.configure(bg='#2C3E50')
-    side_fr.configure(bg='#2C3E50')
-    txt.config(bg="white", fg="black")
-    rslt.config(bg="white", fg="black")
-    txt1.config(bg="white", fg="black")
-    rslt1.config(bg="white", fg="black")
-
-def black_bg(event=None):
-    main_fr.configure(bg='black')
-    side_fr.configure(bg='black')
-    txt.config(bg="#121212", fg="white")
-    rslt.config(bg="#121212", fg="white")
-    txt1.config(bg="#121212", fg="white")
-    rslt1.config(bg="#121212", fg="white")
-    txt.configure(insertbackground="white")
-    txt1.configure(insertbackground="white")
-    rslt.configure(insertbackground="white")
-    rslt1.configure(insertbackground="white")
-
-f2 = Button()
-root.bind('<F2>', hunter_green_bg)
-
-f3 = Button()
-root.bind('<F3>', ocean_bg)
-
-f4 = Button()
-root.bind('<F4>', black_bg)
-
-f4 = Button()
-root.bind('<F4>', navy_bg)
-
-# button colors
-
-def norm_btn(event=None):
-    btn.configure(bg="#d72631", fg="#fcf5e5")
-
-def clear_btn(event=None):
-    clr.configure(bg="#d72631", fg="#fcf5e5")
-
-def copy_btn(event=None):
-    cpy.configure(bg="#d72631", fg="#fcf5e5")
-
-def rnm_btn(event=None):
-    rnm.configure(bg="#d72631", fg="#fcf5e5")
-
-def grey_btn(event=None):
-    btn.configure(bg="#f0f0f0", fg="black")
-    clr.configure(bg="#f0f0f0", fg="black")
-    cpy.configure(bg="#f0f0f0", fg="black")
-    rnm.configure(bg="#f0f0f0", fg="black")
-
-# buttons and their bindings
-
-clr = Button(main_fr, text="Clear", width=9, command=clear_entry)
+clr = ttk.Button(main_fr, text="Clear", width=9, command=clear_entry)
 clr.grid(row=0,
         column=1,
         sticky="nw",
         pady=(5,5))
 
-clr.bind("<Enter>", clear_btn)
-clr.bind("<Leave>", grey_btn)
-
-btn = Button(main_fr, text="Normalize", width=9, command=title_normalizer)
+btn = ttk.Button(main_fr, text="Normalize", width=9, command=title_normalizer)
 btn.grid(row=0,
         column=1,
         sticky="ws",
         padx=(0,5),
         pady=(0,5))
 
-btn.bind("<Enter>", norm_btn)
-btn.bind("<Leave>", grey_btn)
-
-cpy = Button(main_fr, text="Copy",  width=9, command=lambda:[copy_to_clipboard(), clear_entry()])
+cpy = ttk.Button(main_fr, text="Copy",  width=9, command=lambda:[copy_to_clipboard(), clear_entry()])
 cpy.grid(row=1,
         column=1,
         sticky="n",
         padx=(0,5))
 
-cpy.bind("<Enter>", copy_btn)
-cpy.bind("<Leave>", grey_btn)
-
-rnm = Button(main_fr, text="Rename", width=9, command=lambda:[rename(), clear_entry()])
+rnm = ttk.Button(main_fr, text="Rename", width=9, command=lambda:[rename(), clear_entry()])
 rnm.grid(row=1,
         column=1,
         sticky="sw",
         pady=(5,0))
 
-rnm.bind("<Enter>", rnm_btn)
-rnm.bind("<Leave>", grey_btn)
-
 ''' Adding a side frame '''
 
 side_fr = Frame(root, bg='#025a6c')
 
-txt1 = Text(side_fr, font='Calibri 10', height=5, width=25, wrap=WORD)
-txt1.focus()
-txt1.grid(row=0, column=0, pady=5, padx=5)
+txt_s = Text(side_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
+txt_s.focus()
+txt_s.grid(row=0, column=0, pady=5, padx=5)
 
-rslt1 = Text(side_fr, font=('Calibri 10'), height=5, width=25, wrap=WORD)
-rslt1.grid(row=1, column=0)
+rslt_s = Text(side_fr, font=('Calibri 10'), height=5.5, width=28, wrap=WORD)
+rslt_s.grid(row=1, column=0)
 
 def get_file_name(event=None):
     global file_directory
@@ -264,125 +197,82 @@ def get_file_name(event=None):
     filename = file_name_and_extension[0]
     file_ext = file_name_and_extension[1]
 
-    clear_entry1()
-    txt1.insert("end", filename)
+    clear_entry_s()
+    txt_s.insert("end", filename)
     txt.insert("end", filename)
-    rslt1.delete('1.0', 'end')
+    rslt_s.delete('1.0', 'end')
 
 def add_underscore():
     global D
-    input_txt = txt1.get(1.0, "end-1c")
+    input_txt = txt_s.get(1.0, "end-1c")
     D = input_txt
     if " " in D:
         D = D.replace(" ", "_")
     if "-" in D:
         D = D.replace("-", "_")
-    else:
-        pass
 
-    rslt1.delete('1.0', 'end')
-    rslt1.insert("end", D)
+    rslt_s.delete('1.0', 'end')
+    rslt_s.insert("end", D)
 
 def add_hypen():
     global D
-    input_txt = txt1.get(1.0, "end-1c")
+    input_txt = txt_s.get(1.0, "end-1c")
     D = input_txt
     if " " in D:
         D = D.replace(" ", "-")
     if "_" in D:
         D = D.replace("_", "-")
-    else:
-        pass
 
-    rslt1.delete('1.0', 'end')
-    rslt1.insert("end", D)
+    rslt_s.delete('1.0', 'end')
+    rslt_s.insert("end", D)
 
-def copy_to_clipboard1():
-    final_rslt1 = rslt1.get('1.0', 'end-1c')
-    cpy1.clipboard_clear()
-    cpy1.clipboard_append(final_rslt)
-
-def clear_entry1():
-    txt1.delete('1.0', 'end')
-    rslt1.config(state="normal")
-    rslt1.delete('1.0', 'end')
+def clear_entry_s():
+    txt_s.delete('1.0', 'end')
+    rslt_s.config(state="normal")
+    rslt_s.delete('1.0', 'end')
     
-def rename1():
-    final_rslt1 = rslt1.get('1.0', 'end-1c')
-    D = final_rslt1
+def rename_s():
+    final_rslt_s = rslt_s.get('1.0', 'end-1c')
+    D = final_rslt_s
     if ":" or "/" or "\\" or "*" or "?" or "<" or ">" or "\"" or "|" in D: # add prohibited symbols here
         W = "The new filename includes characters that are not allowed in naming a file! ( : / \\ * ? <> |)"
-        rslt1.delete('1.0', 'end')
-        rslt1.insert("end", W)
-        rslt1.config(state="disabled")
-    else:
-        pass
+        rslt_s.delete('1.0', 'end')
+        rslt_s.insert("end", W)
+        rslt_s.config(state="disabled")
+
     old_file = f"{file_directory}" + f"{filename}.{file_ext}"
     new_file_2 = f"{file_directory}" + f"{D}.{file_ext}"
     os.rename(old_file, new_file_2)
-
-# button colors
-
-def clear_btn(event=None):
-    clr1.configure(bg="#d72631", fg="#fcf5e5")
-
-def und_btn(event=None):
-    und1.configure(bg="#d72631", fg="#fcf5e5")
-
-def hyp_btn(event=None):
-    hyp1.configure(bg="#d72631", fg="#fcf5e5")
-
-def rnm_btn(event=None):
-    rnm1.configure(bg="#d72631", fg="#fcf5e5")
-
-def grey_btn(event=None):
-    clr1.configure(bg="#f0f0f0", fg="black")
-    und1.configure(bg="#f0f0f0", fg="black")
-    hyp1.configure(bg="#f0f0f0", fg="black")
-    rnm1.configure(bg="#f0f0f0", fg="black")
+    clear_entry_s()
 
 # buttons and their bindings
 
-clr1 = Button(side_fr, text="Clear", width=8, command=clear_entry1)
-clr1.grid(row=0,
+clr_s = ttk.Button(side_fr, text="Clear", width=8, command=clear_entry_s)
+clr_s.grid(row=0,
         column=1,
         sticky="nw",
         padx=(0,5),
         pady=(5,5))
 
-clr1.bind("<Enter>", clear_btn)
-clr1.bind("<Leave>", grey_btn)
-
-und1 = Button(side_fr, text="Add ( _ )", command=add_underscore)
-und1.grid(row=0,
+und_s = ttk.Button(side_fr, text="Add ( _ )", width=8, command=add_underscore)
+und_s.grid(row=0,
         column=1,
         sticky="wse",
         padx=(0,5),
         pady=(0,5))
 
-und1.bind("<Enter>", und_btn)
-und1.bind("<Leave>", grey_btn)
-
-hyp1 = Button(side_fr, text="Add ( - )", command=lambda:[add_hypen()])
-hyp1.grid(row=1,
+hyp_s = ttk.Button(side_fr, text="Add ( - )", width=8, command=lambda:[add_hypen()])
+hyp_s.grid(row=1,
         column=1,
         sticky="new",
         padx=(0,5))
 
-hyp1.bind("<Enter>", hyp_btn)
-hyp1.bind("<Leave>", grey_btn)
-
-side_fr.bind('<Control-C>', copy_to_clipboard1)
-
-rnm1 = Button(side_fr, text="Rename", width=8, command=lambda:[rename1(), clear_entry1()])
-rnm1.grid(row=1,
+rnm_s = ttk.Button(side_fr, text="Rename", width=8, command=lambda:[rename_s(), clear_entry_s()])
+rnm_s.grid(row=1,
         column=1,
         sticky="ws",
         padx=(0,5),
         pady=(5,0))
-
-rnm1.bind("<Enter>", rnm_btn)
-rnm1.bind("<Leave>", grey_btn)
 
 def to_side_frame(event=None):
     main_fr.grid_forget()
@@ -392,11 +282,105 @@ def to_main_frame(event=None):
     side_fr.grid_forget()
     main_fr.grid(ipady=2)
 
-# Adding menubar to an app
+# adding color themes
+
+def ocean_bg(event=None):
+    main_fr.configure(bg='#025a6c')
+    txt.config(bg="white", fg="black")
+    rslt.config(bg="white", fg="black")
+
+    side_fr.configure(bg='#025a6c')
+    txt_s.config(bg="white", fg="black")
+    rslt_s.config(bg="white", fg="black")
+
+    clr['style'] = 'Grey.TButton'
+    btn['style'] = 'Grey.TButton'
+    cpy['style'] = 'Grey.TButton'
+    rnm['style'] = 'Grey.TButton'
+    
+    clr_s['style'] = 'Grey.TButton'
+    und_s['style'] = 'Grey.TButton'
+    hyp_s['style'] = 'Grey.TButton'
+    rnm_s['style'] = 'Grey.TButton'
+
+def hunter_green_bg(event=None):
+    main_fr.configure(bg='#355E3B')
+    txt.config(bg="white", fg="black")
+    rslt.config(bg="white", fg="black")
+    
+    side_fr.configure(bg='#355E3B')
+    txt_s.config(bg="white", fg="black")
+    rslt_s.config(bg="white", fg="black")
+
+    clr['style'] = 'Grey.TButton'
+    btn['style'] = 'Grey.TButton'
+    cpy['style'] = 'Grey.TButton'
+    rnm['style'] = 'Grey.TButton'
+
+    clr_s['style'] = 'Grey.TButton'
+    und_s['style'] = 'Grey.TButton'
+    hyp_s['style'] = 'Grey.TButton'
+    rnm_s['style'] = 'Grey.TButton'
+
+def navy_bg(event=None):
+    main_fr.configure(bg='#2C3E50')
+    txt.config(bg="white", fg="black")
+    rslt.config(bg="white", fg="black")
+    
+    side_fr.configure(bg='#2C3E50')
+    txt_s.config(bg="white", fg="black")
+    rslt_s.config(bg="white", fg="black")
+
+    clr['style'] = 'Grey.TButton'
+    btn['style'] = 'Grey.TButton'
+    cpy['style'] = 'Grey.TButton'
+    rnm['style'] = 'Grey.TButton'
+
+    clr_s['style'] = 'Grey.TButton'
+    und_s['style'] = 'Grey.TButton'
+    hyp_s['style'] = 'Grey.TButton'
+    rnm_s['style'] = 'Grey.TButton'
+
+def black_bg(event=None):
+    main_fr.configure(bg='black')
+    txt.config(bg="#121212", fg="white")
+    rslt.config(bg="#121212", fg="white")
+    txt.configure(insertbackground="white")
+    rslt.configure(insertbackground="white")
+    
+    side_fr.configure(bg='black')
+    txt_s.config(bg="#121212", fg="white")
+    rslt_s.config(bg="#121212", fg="white")
+    txt_s.configure(insertbackground="white")
+    rslt_s.configure(insertbackground="white")
+    
+    clr['style'] = 'Black.TButton'
+    btn['style'] = 'Black.TButton'
+    cpy['style'] = 'Black.TButton'
+    rnm['style'] = 'Black.TButton'
+
+    clr_s['style'] = 'Black.TButton'
+    hyp_s['style'] = 'Black.TButton'
+    und_s['style'] = 'Black.TButton'
+    rnm_s['style'] = 'Black.TButton'
+
+f2 = Button()
+root.bind('<F2>', hunter_green_bg)
+
+f3 = Button()
+root.bind('<F3>', ocean_bg)
+
+f4 = Button()
+root.bind('<F4>', black_bg)
+
+f4 = Button()
+root.bind('<F4>', navy_bg)
+
+# adding menubar to the app
 
 menubar = Menu(root)
 root.config(menu=menubar)
-filemenu = Menu(menubar, tearoff=0)     # ajralib chiqishni oldini olish
+filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="Open...", command=get_file_name)
 filemenu.add_command(label="Info", command=info_popup)
 filemenu.add_separator()
