@@ -1,3 +1,4 @@
+# 19.05.23 | Fixed some bugs; mainly altering the curser color to complement the themes
 # 16.05.23 | Made the app screen bigger for easier usage
 #          | Removed manual attribution of button color themes, that was too much hassle
 #          | Added 2 styles for buttons and clam theme to the app
@@ -5,7 +6,6 @@
 # 10.05.23 | Changed the cursor color to white in the black theme
 # 04.05.23 | Removed some button icons because they were displayed inproperly in some screen resolutions
 #          | Added 2 color themes, removed boring grey theme
-
 # 01.04.23 | Made the app window responsive to various screens
 # 28.03.23 | 1) Dealt with some syntax errors in renaming; but there are still harmless bugs
 #            2) Added renaming ability right from textbox
@@ -288,10 +288,14 @@ def ocean_bg(event=None):
     main_fr.configure(bg='#025a6c')
     txt.config(bg="white", fg="black")
     rslt.config(bg="white", fg="black")
+    txt.configure(insertbackground="black")
+    rslt.configure(insertbackground="black")
 
     side_fr.configure(bg='#025a6c')
     txt_s.config(bg="white", fg="black")
     rslt_s.config(bg="white", fg="black")
+    txt_s.configure(insertbackground="black")
+    rslt_s.configure(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -307,10 +311,14 @@ def hunter_green_bg(event=None):
     main_fr.configure(bg='#355E3B')
     txt.config(bg="white", fg="black")
     rslt.config(bg="white", fg="black")
+    txt.configure(insertbackground="black")
+    rslt.configure(insertbackground="black")
     
     side_fr.configure(bg='#355E3B')
     txt_s.config(bg="white", fg="black")
     rslt_s.config(bg="white", fg="black")
+    txt_s.configure(insertbackground="black")
+    rslt_s.configure(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -326,10 +334,14 @@ def navy_bg(event=None):
     main_fr.configure(bg='#2C3E50')
     txt.config(bg="white", fg="black")
     rslt.config(bg="white", fg="black")
+    txt.configure(insertbackground="black")
+    rslt.configure(insertbackground="black")
     
     side_fr.configure(bg='#2C3E50')
     txt_s.config(bg="white", fg="black")
     rslt_s.config(bg="white", fg="black")
+    txt_s.configure(insertbackground="black")
+    rslt_s.configure(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
