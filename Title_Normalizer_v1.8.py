@@ -285,17 +285,17 @@ def to_main_frame(event=None):
 # adding color themes
 
 def ocean_bg(event=None):
-    main_fr.configure(bg='#025a6c')
+    main_fr.config(bg='#025a6c')
     txt.config(bg="white", fg="black")
     rslt.config(bg="white", fg="black")
-    txt.configure(insertbackground="black")
-    rslt.configure(insertbackground="black")
+    txt.config(insertbackground="black")
+    rslt.config(insertbackground="black")
 
-    side_fr.configure(bg='#025a6c')
+    side_fr.config(bg='#025a6c')
     txt_s.config(bg="white", fg="black")
     rslt_s.config(bg="white", fg="black")
-    txt_s.configure(insertbackground="black")
-    rslt_s.configure(insertbackground="black")
+    txt_s.config(insertbackground="black")
+    rslt_s.config(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -308,17 +308,17 @@ def ocean_bg(event=None):
     rnm_s['style'] = 'Grey.TButton'
 
 def hunter_green_bg(event=None):
-    main_fr.configure(bg='#355E3B')
+    main_fr.config(bg='#355E3B')
     txt.config(bg="white", fg="black")
     rslt.config(bg="white", fg="black")
-    txt.configure(insertbackground="black")
-    rslt.configure(insertbackground="black")
+    txt.config(insertbackground="black")
+    rslt.config(insertbackground="black")
     
-    side_fr.configure(bg='#355E3B')
+    side_fr.config(bg='#355E3B')
     txt_s.config(bg="white", fg="black")
     rslt_s.config(bg="white", fg="black")
-    txt_s.configure(insertbackground="black")
-    rslt_s.configure(insertbackground="black")
+    txt_s.config(insertbackground="black")
+    rslt_s.config(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -331,17 +331,17 @@ def hunter_green_bg(event=None):
     rnm_s['style'] = 'Grey.TButton'
 
 def navy_bg(event=None):
-    main_fr.configure(bg='#2C3E50')
+    main_fr.config(bg='#2C3E50')
     txt.config(bg="white", fg="black")
     rslt.config(bg="white", fg="black")
-    txt.configure(insertbackground="black")
-    rslt.configure(insertbackground="black")
+    txt.config(insertbackground="black")
+    rslt.config(insertbackground="black")
     
-    side_fr.configure(bg='#2C3E50')
+    side_fr.config(bg='#2C3E50')
     txt_s.config(bg="white", fg="black")
     rslt_s.config(bg="white", fg="black")
-    txt_s.configure(insertbackground="black")
-    rslt_s.configure(insertbackground="black")
+    txt_s.config(insertbackground="black")
+    rslt_s.config(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -354,17 +354,17 @@ def navy_bg(event=None):
     rnm_s['style'] = 'Grey.TButton'
 
 def black_bg(event=None):
-    main_fr.configure(bg='black')
+    main_fr.config(bg='black')
     txt.config(bg="#121212", fg="white")
     rslt.config(bg="#121212", fg="white")
-    txt.configure(insertbackground="white")
-    rslt.configure(insertbackground="white")
+    txt.config(insertbackground="white")
+    rslt.config(insertbackground="white")
     
-    side_fr.configure(bg='black')
+    side_fr.config(bg='black')
     txt_s.config(bg="#121212", fg="white")
     rslt_s.config(bg="#121212", fg="white")
-    txt_s.configure(insertbackground="white")
-    rslt_s.configure(insertbackground="white")
+    txt_s.config(insertbackground="white")
+    rslt_s.config(insertbackground="white")
     
     clr['style'] = 'Black.TButton'
     btn['style'] = 'Black.TButton'
