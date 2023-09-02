@@ -1,3 +1,7 @@
+# 02.09.23 | Added removing (.) while renameing in Developer Mode
+#          | Refactored the code
+#          | Fixed small bugs. 
+
 # 19.05.23 | Fixed some bugs; mainly altering the curser color to complement the themes
 # 16.05.23 | Made the app screen bigger for easier usage
 #          | Removed manual attribution of button color themes, that was too much hassle
@@ -10,7 +14,6 @@
 # 28.03.23 | 1) Dealt with some syntax errors in renaming; but there are still harmless bugs
 #            2) Added renaming ability right from textbox
 
-import re
 import os
 from tkinter import *
 from tkinter import filedialog as fd
@@ -77,12 +80,12 @@ root.bind('<F1>', info_popup)
 main_fr = Frame(root, bg='#025a6c')
 main_fr.grid(ipady=2)
 
-txt = Text(main_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
-txt.focus()
-txt.grid(row=0, column=0, pady=5, padx=5)
+txt_box = Text(main_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
+txt_box.focus()
+txt_box.grid(row=0, column=0, pady=5, padx=5)
 
-rslt = Text(main_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
-rslt.grid(row=1, column=0)
+rslt_box = Text(main_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
+rslt_box.grid(row=1, column=0)
 
 def get_file_name(event=None):
     global file_directory
@@ -99,14 +102,14 @@ def get_file_name(event=None):
     file_ext = file_name_and_extension[1]
 
     clear_entry()
-    txt.insert("end", filename)
-    rslt.delete('1.0', 'end')
+    txt_box.insert("end", filename)
+    rslt_box.delete('1.0', 'end')
 
 root.bind("<Control-o>", get_file_name)     # adding a shortcut for opening a file
 
 def title_normalizer(event=None):
     global T
-    input_txt = txt.get(1.0, "end-1c")
+    input_txt = txt_box.get(1.0, "end-1c")
     T = input_txt
 
     if "_" or "-" or "." or "  " in T:
@@ -115,35 +118,36 @@ def title_normalizer(event=None):
         T = T.replace(".", " ")
         T = T.replace("  ", " ")
 
-    rslt.delete('1.0', 'end')
-    rslt.insert("end", T)
+    rslt_box.delete('1.0', 'end')
+    rslt_box.insert("end", T)
 
 def copy_to_clipboard():
     global F
-    final_rslt = rslt.get('1.0', 'end-1c')
+    final_rslt = rslt_box.get('1.0', 'end-1c')
     F = final_rslt
     cpy.clipboard_clear()
     cpy.clipboard_append(F)
 
 def clear_entry():
-    txt.delete('1.0', 'end')
-    rslt.delete('1.0', 'end')
-    rslt.config(state="normal")
-    rslt.delete('1.0', 'end')
+    txt_box.delete('1.0', 'end')
+    rslt_box.delete('1.0', 'end')
+    rslt_box.config(state="normal")
+    rslt_box.delete('1.0', 'end')
 
 def rename():
-    final_rslt = rslt.get('1.0', 'end-1c')
-    F = final_rslt
+    new_filename = rslt_box.get('1.0', 'end-1c')
+    F = new_filename
     if ":" or "/" or "\\" or "*" or "?" or "<" or ">" or "\"" or "|" in F: # add prohibited symbols here
         W = "The new filename includes characters that are not allowed in naming a file! ( : / \\ * ? <> |)"
-        rslt.delete('1.0', 'end')
-        rslt.insert("end", W)
-        rslt.config(state="disabled")
+        rslt_box.delete('1.0', 'end')
+        rslt_box.insert("end", W)
+        rslt_box.config(state="disabled")
 
-    old_file = f"{file_directory}" + f"{filename}.{file_ext}"
-    new_file_1 = f"{file_directory}" + f"{F}.{file_ext}"
+    old_file = f"{file_directory}{filename}.{file_ext}"
+    new_file_1 = f"{file_directory}{new_filename}.{file_ext}"
     os.rename(old_file, new_file_1)
     clear_entry()
+    clear_entry_s()
 
 # adding buttons
 
@@ -176,12 +180,12 @@ rnm.grid(row=1,
 
 side_fr = Frame(root, bg='#025a6c')
 
-txt_s = Text(side_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
-txt_s.focus()
-txt_s.grid(row=0, column=0, pady=5, padx=5)
+txt_box_s = Text(side_fr, font='Calibri 10', height=5.5, width=28, wrap=WORD)
+txt_box_s.focus()
+txt_box_s.grid(row=0, column=0, pady=5, padx=5)
 
-rslt_s = Text(side_fr, font=('Calibri 10'), height=5.5, width=28, wrap=WORD)
-rslt_s.grid(row=1, column=0)
+rslt_box_s = Text(side_fr, font=('Calibri 10'), height=5.5, width=28, wrap=WORD)
+rslt_box_s.grid(row=1, column=0)
 
 def get_file_name(event=None):
     global file_directory
@@ -198,52 +202,61 @@ def get_file_name(event=None):
     file_ext = file_name_and_extension[1]
 
     clear_entry_s()
-    txt_s.insert("end", filename)
-    txt.insert("end", filename)
-    rslt_s.delete('1.0', 'end')
+    txt_box_s.insert("end", filename)
+    txt_box.insert("end", filename)
+    rslt_box_s.delete('1.0', 'end')
 
 def add_underscore():
     global D
-    input_txt = txt_s.get(1.0, "end-1c")
+    input_txt = txt_box_s.get(1.0, "end-1c")
     D = input_txt
+
+    if "." in D:
+        D = D.replace(".", "")
     if " " in D:
         D = D.replace(" ", "_")
     if "-" in D:
         D = D.replace("-", "_")
 
-    rslt_s.delete('1.0', 'end')
-    rslt_s.insert("end", D)
+    rslt_box_s.delete('1.0', 'end')
+    rslt_box_s.insert("end", D)
 
 def add_hypen():
     global D
-    input_txt = txt_s.get(1.0, "end-1c")
+    input_txt = txt_box_s.get(1.0, "end-1c")
     D = input_txt
+    D = D.rstrip(",")
+
+    if "." in D:
+        D = D.replace(".", "")
     if " " in D:
         D = D.replace(" ", "-")
     if "_" in D:
         D = D.replace("_", "-")
 
-    rslt_s.delete('1.0', 'end')
-    rslt_s.insert("end", D)
+    rslt_box_s.delete('1.0', 'end')
+    rslt_box_s.insert("end", D)
 
 def clear_entry_s():
-    txt_s.delete('1.0', 'end')
-    rslt_s.config(state="normal")
-    rslt_s.delete('1.0', 'end')
+    txt_box_s.delete('1.0', 'end')
+    rslt_box_s.config(state="normal")
+    rslt_box_s.delete('1.0', 'end')
     
 def rename_s():
-    final_rslt_s = rslt_s.get('1.0', 'end-1c')
-    D = final_rslt_s
+    new_filename_s = rslt_box_s.get('1.0', 'end-1c')
+    D = new_filename_s
+    
     if ":" or "/" or "\\" or "*" or "?" or "<" or ">" or "\"" or "|" in D: # add prohibited symbols here
         W = "The new filename includes characters that are not allowed in naming a file! ( : / \\ * ? <> |)"
-        rslt_s.delete('1.0', 'end')
-        rslt_s.insert("end", W)
-        rslt_s.config(state="disabled")
+        rslt_box_s.delete('1.0', 'end')
+        rslt_box_s.insert("end", W)
+        rslt_box_s.config(state="disabled")
 
-    old_file = f"{file_directory}" + f"{filename}.{file_ext}"
-    new_file_2 = f"{file_directory}" + f"{D}.{file_ext}"
+    old_file = f"{file_directory}{filename}.{file_ext}"
+    new_file_2 = f"{file_directory}{new_filename_s}.{file_ext}"
     os.rename(old_file, new_file_2)
     clear_entry_s()
+    clear_entry()
 
 # buttons and their bindings
 
@@ -286,16 +299,16 @@ def to_main_frame(event=None):
 
 def ocean_bg(event=None):
     main_fr.config(bg='#025a6c')
-    txt.config(bg="white", fg="black")
-    rslt.config(bg="white", fg="black")
-    txt.config(insertbackground="black")
-    rslt.config(insertbackground="black")
+    txt_box.config(bg="white", fg="black")
+    rslt_box.config(bg="white", fg="black")
+    txt_box.config(insertbackground="black")
+    rslt_box.config(insertbackground="black")
 
     side_fr.config(bg='#025a6c')
-    txt_s.config(bg="white", fg="black")
-    rslt_s.config(bg="white", fg="black")
-    txt_s.config(insertbackground="black")
-    rslt_s.config(insertbackground="black")
+    txt_box_s.config(bg="white", fg="black")
+    rslt_box_s.config(bg="white", fg="black")
+    txt_box_s.config(insertbackground="black")
+    rslt_box_s.config(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -309,16 +322,16 @@ def ocean_bg(event=None):
 
 def hunter_green_bg(event=None):
     main_fr.config(bg='#355E3B')
-    txt.config(bg="white", fg="black")
-    rslt.config(bg="white", fg="black")
-    txt.config(insertbackground="black")
-    rslt.config(insertbackground="black")
+    txt_box.config(bg="white", fg="black")
+    rslt_box.config(bg="white", fg="black")
+    txt_box.config(insertbackground="black")
+    rslt_box.config(insertbackground="black")
     
     side_fr.config(bg='#355E3B')
-    txt_s.config(bg="white", fg="black")
-    rslt_s.config(bg="white", fg="black")
-    txt_s.config(insertbackground="black")
-    rslt_s.config(insertbackground="black")
+    txt_box_s.config(bg="white", fg="black")
+    rslt_box_s.config(bg="white", fg="black")
+    txt_box_s.config(insertbackground="black")
+    rslt_box_s.config(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -332,16 +345,16 @@ def hunter_green_bg(event=None):
 
 def navy_bg(event=None):
     main_fr.config(bg='#2C3E50')
-    txt.config(bg="white", fg="black")
-    rslt.config(bg="white", fg="black")
-    txt.config(insertbackground="black")
-    rslt.config(insertbackground="black")
+    txt_box.config(bg="white", fg="black")
+    rslt_box.config(bg="white", fg="black")
+    txt_box.config(insertbackground="black")
+    rslt_box.config(insertbackground="black")
     
     side_fr.config(bg='#2C3E50')
-    txt_s.config(bg="white", fg="black")
-    rslt_s.config(bg="white", fg="black")
-    txt_s.config(insertbackground="black")
-    rslt_s.config(insertbackground="black")
+    txt_box_s.config(bg="white", fg="black")
+    rslt_box_s.config(bg="white", fg="black")
+    txt_box_s.config(insertbackground="black")
+    rslt_box_s.config(insertbackground="black")
 
     clr['style'] = 'Grey.TButton'
     btn['style'] = 'Grey.TButton'
@@ -355,16 +368,16 @@ def navy_bg(event=None):
 
 def black_bg(event=None):
     main_fr.config(bg='black')
-    txt.config(bg="#121212", fg="white")
-    rslt.config(bg="#121212", fg="white")
-    txt.config(insertbackground="white")
-    rslt.config(insertbackground="white")
+    txt_box.config(bg="#121212", fg="white")
+    rslt_box.config(bg="#121212", fg="white")
+    txt_box.config(insertbackground="white")
+    rslt_box.config(insertbackground="white")
     
     side_fr.config(bg='black')
-    txt_s.config(bg="#121212", fg="white")
-    rslt_s.config(bg="#121212", fg="white")
-    txt_s.config(insertbackground="white")
-    rslt_s.config(insertbackground="white")
+    txt_box_s.config(bg="#121212", fg="white")
+    rslt_box_s.config(bg="#121212", fg="white")
+    txt_box_s.config(insertbackground="white")
+    rslt_box_s.config(insertbackground="white")
     
     clr['style'] = 'Black.TButton'
     btn['style'] = 'Black.TButton'
