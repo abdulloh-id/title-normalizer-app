@@ -1,3 +1,5 @@
+# 04.09.23 | Added a warning window which pops up while a renaming error happens.
+
 # 02.09.23 | Added removing (.) while renameing in Developer Mode
 #          | Refactored the code
 #          | Fixed small bugs. 
@@ -19,6 +21,7 @@ from tkinter import *
 from tkinter import filedialog as fd
 from tkinter import Menu
 from tkinter import ttk
+from tkinter.messagebox import showerror
 from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(1)
@@ -53,7 +56,7 @@ style_black.configure('Black.TButton',
 
 def info_popup(event=None):
     top = Toplevel(root)
-    top.title("About: Title Normalizer v1.8")
+    top.title("About: Title Normalizer v1.9")
     Label(top, justify = "left", text="Info:\
     \n ✅ Regular Mode: Bu rejimda siz oʻzingiz istagan sarlavha yoki fayl nomidagi ortiqcha probel,\n tagchiziq, chiziqcha yoki nuqtalarni olib tashlashingiz mumkin.\
     \n ✅ Developer Mode: Bu rejimda oʻzingiz istagan sarlavha yoki fayl nomidagi boʻsh joylar oʻrniga\n tagchiziq yoki chiziqcha qoʻyib qoʻyishingiz mumkin.\n\
@@ -136,18 +139,16 @@ def clear_entry():
 
 def rename():
     new_filename = rslt_box.get('1.0', 'end-1c')
-    F = new_filename
-    if ":" or "/" or "\\" or "*" or "?" or "<" or ">" or "\"" or "|" in F: # add prohibited symbols here
-        W = "The new filename includes characters that are not allowed in naming a file! ( : / \\ * ? <> |)"
-        rslt_box.delete('1.0', 'end')
-        rslt_box.insert("end", W)
-        rslt_box.config(state="disabled")
 
-    old_file = f"{file_directory}{filename}.{file_ext}"
-    new_file_1 = f"{file_directory}{new_filename}.{file_ext}"
-    os.rename(old_file, new_file_1)
-    clear_entry()
-    clear_entry_s()
+    try:
+        old_file = f"{file_directory}{filename}.{file_ext}"
+        new_file = f"{file_directory}{new_filename}.{file_ext}"
+        os.rename(old_file, new_file_1)
+        clear_entry()
+        clear_entry_s()
+    except:
+        warning_message = "A filename cannot include these characters : / \\ * ? <> |"
+        showerror(title="Renaming Error", message=warning_message)
 
 # adding buttons
 
@@ -244,19 +245,16 @@ def clear_entry_s():
     
 def rename_s():
     new_filename_s = rslt_box_s.get('1.0', 'end-1c')
-    D = new_filename_s
-    
-    if ":" or "/" or "\\" or "*" or "?" or "<" or ">" or "\"" or "|" in D: # add prohibited symbols here
-        W = "The new filename includes characters that are not allowed in naming a file! ( : / \\ * ? <> |)"
-        rslt_box_s.delete('1.0', 'end')
-        rslt_box_s.insert("end", W)
-        rslt_box_s.config(state="disabled")
 
-    old_file = f"{file_directory}{filename}.{file_ext}"
-    new_file_2 = f"{file_directory}{new_filename_s}.{file_ext}"
-    os.rename(old_file, new_file_2)
-    clear_entry_s()
-    clear_entry()
+    try:
+        old_file = f"{file_directory}{filename}.{file_ext}"
+        new_file = f"{file_directory}{new_filename_s}.{file_ext}"
+        os.rename(old_file, new_file)
+        clear_entry_s()
+        clear_entry()
+    except OSError:
+        warning_message = "A filename cannot include these characters : / \\ * ? <> |"
+        showerror(title="Renaming Error", message=warning_message)
 
 # buttons and their bindings
 
