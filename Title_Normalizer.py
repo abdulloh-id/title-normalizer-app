@@ -143,10 +143,10 @@ def rename():
     try:
         old_file = f"{file_directory}{filename}.{file_ext}"
         new_file = f"{file_directory}{new_filename}.{file_ext}"
-        os.rename(old_file, new_file_1)
+        os.rename(old_file, new_file)
         clear_entry()
         clear_entry_s()
-    except:
+    except OSError:
         warning_message = "A filename cannot include these characters : / \\ * ? <> |"
         showerror(title="Renaming Error", message=warning_message)
 
