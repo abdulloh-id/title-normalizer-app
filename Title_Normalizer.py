@@ -1,3 +1,5 @@
+# 05.09.23 | Refactored the code.
+
 # 04.09.23 | Added a warning window which pops up while a renaming error happens.
 
 # 02.09.23 | Added removing (.) while renameing in Developer Mode
@@ -104,13 +106,13 @@ def get_file_name(event=None):
     filename = file_name_and_extension[0]
     file_ext = file_name_and_extension[1]
 
-    clear_entry()
+    clear_entries()
     txt_box.insert("end", filename)
     rslt_box.delete('1.0', 'end')
 
 root.bind("<Control-o>", get_file_name)     # adding a shortcut for opening a file
 
-def title_normalizer(event=None):
+def normalize(event=None):
     global T
     input_txt = txt_box.get(1.0, "end-1c")
     T = input_txt
@@ -131,11 +133,11 @@ def copy_to_clipboard():
     cpy.clipboard_clear()
     cpy.clipboard_append(F)
 
-def clear_entry():
+def clear_entries():
     txt_box.delete('1.0', 'end')
     rslt_box.delete('1.0', 'end')
-    rslt_box.config(state="normal")
-    rslt_box.delete('1.0', 'end')
+    txt_box_s.delete('1.0', 'end')
+    rslt_box_s.delete('1.0', 'end')
 
 def rename():
     new_filename = rslt_box.get('1.0', 'end-1c')
@@ -144,34 +146,32 @@ def rename():
         old_file = f"{file_directory}{filename}.{file_ext}"
         new_file = f"{file_directory}{new_filename}.{file_ext}"
         os.rename(old_file, new_file)
-        clear_entry()
-        clear_entry_s()
     except OSError:
         warning_message = "A filename cannot include these characters : / \\ * ? <> |"
         showerror(title="Renaming Error", message=warning_message)
 
 # adding buttons
 
-clr = ttk.Button(main_fr, text="Clear", width=9, command=clear_entry)
+clr = ttk.Button(main_fr, text="Clear", width=9, command=clear_entries)
 clr.grid(row=0,
         column=1,
         sticky="nw",
         pady=(5,5))
 
-btn = ttk.Button(main_fr, text="Normalize", width=9, command=title_normalizer)
+btn = ttk.Button(main_fr, text="Normalize", width=9, command=normalize)
 btn.grid(row=0,
         column=1,
         sticky="ws",
         padx=(0,5),
         pady=(0,5))
 
-cpy = ttk.Button(main_fr, text="Copy",  width=9, command=lambda:[copy_to_clipboard(), clear_entry()])
+cpy = ttk.Button(main_fr, text="Copy",  width=9, command=lambda:[copy_to_clipboard(), clear_entries()])
 cpy.grid(row=1,
         column=1,
         sticky="n",
         padx=(0,5))
 
-rnm = ttk.Button(main_fr, text="Rename", width=9, command=lambda:[rename(), clear_entry()])
+rnm = ttk.Button(main_fr, text="Rename", width=9, command=lambda:[rename(), clear_entries()])
 rnm.grid(row=1,
         column=1,
         sticky="sw",
@@ -202,7 +202,7 @@ def get_file_name(event=None):
     filename = file_name_and_extension[0]
     file_ext = file_name_and_extension[1]
 
-    clear_entry_s()
+    clear_entries()
     txt_box_s.insert("end", filename)
     txt_box.insert("end", filename)
     rslt_box_s.delete('1.0', 'end')
@@ -237,11 +237,6 @@ def add_hypen():
 
     rslt_box_s.delete('1.0', 'end')
     rslt_box_s.insert("end", D)
-
-def clear_entry_s():
-    txt_box_s.delete('1.0', 'end')
-    rslt_box_s.config(state="normal")
-    rslt_box_s.delete('1.0', 'end')
     
 def rename_s():
     new_filename_s = rslt_box_s.get('1.0', 'end-1c')
@@ -250,15 +245,13 @@ def rename_s():
         old_file = f"{file_directory}{filename}.{file_ext}"
         new_file = f"{file_directory}{new_filename_s}.{file_ext}"
         os.rename(old_file, new_file)
-        clear_entry_s()
-        clear_entry()
     except OSError:
         warning_message = "A filename cannot include these characters : / \\ * ? <> |"
         showerror(title="Renaming Error", message=warning_message)
 
 # buttons and their bindings
 
-clr_s = ttk.Button(side_fr, text="Clear", width=8, command=clear_entry_s)
+clr_s = ttk.Button(side_fr, text="Clear", width=8, command=clear_entries())
 clr_s.grid(row=0,
         column=1,
         sticky="nw",
@@ -278,7 +271,7 @@ hyp_s.grid(row=1,
         sticky="new",
         padx=(0,5))
 
-rnm_s = ttk.Button(side_fr, text="Rename", width=8, command=lambda:[rename_s(), clear_entry_s()])
+rnm_s = ttk.Button(side_fr, text="Rename", width=8, command=lambda:[rename_s(), clear_entries()])
 rnm_s.grid(row=1,
         column=1,
         sticky="ws",
