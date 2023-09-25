@@ -1,3 +1,5 @@
+# 25.09.23 | Fixed error message popping up while trying to rename a file with empty textbox.
+
 # 05.09.23 | Refactored the code.
 
 # 04.09.23 | Added a warning window which pops up while a renaming error happens.
@@ -16,7 +18,7 @@
 #          | Added 2 color themes, removed boring grey theme
 # 01.04.23 | Made the app window responsive to various screens
 # 28.03.23 | 1) Dealt with some syntax errors in renaming; but there are still harmless bugs
-#            2) Added renaming ability right from textbox
+#            2) Added renaming ability right from the textbox
 
 import os
 from tkinter import *
@@ -141,14 +143,14 @@ def clear_entries():
 
 def rename():
     new_filename = rslt_box.get('1.0', 'end-1c')
-
-    try:
-        old_file = f"{file_directory}{filename}.{file_ext}"
-        new_file = f"{file_directory}{new_filename}.{file_ext}"
-        os.rename(old_file, new_file)
-    except OSError:
-        warning_message = "A filename cannot include these characters : / \\ * ? <> |"
-        showerror(title="Renaming Error", message=warning_message)
+    if new_filename != "":
+        try:
+            old_file = f"{file_directory}{filename}.{file_ext}"
+            new_file = f"{file_directory}{new_filename}.{file_ext}"
+            os.rename(old_file, new_file)
+        except OSError:
+            warning_message = "A filename cannot include these characters : / \\ * ? <> |"
+            showerror(title="Renaming Error", message=warning_message)
 
 # adding buttons
 
